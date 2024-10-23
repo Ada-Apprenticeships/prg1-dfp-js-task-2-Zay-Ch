@@ -15,7 +15,7 @@ function parseFile(indata, outdata, delimiter = ';') {
     // Step 4: Split the input into lines
     const lines = inputContent.split('\n');
     let recordCount = 0; // Initialize a counter for records written
-
+    
     // Step 5: Process each line
     for (let i = 0; i < lines.length; i++) { // Start from 0, will handle header later
         let line = lines[i];
