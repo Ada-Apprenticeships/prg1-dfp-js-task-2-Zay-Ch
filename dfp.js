@@ -24,22 +24,16 @@ function parseFile(indata, outdata, delimiter = ';') {
     return recordCount; // Return the total number of records written
 }
 
-        // Step 7: Split the line using the specified delimiter
-        const parts = line.split(delimiter);
-        if (parts.length < 2) continue; // Ensure there are at least two parts
-
-        const sentiment = parts[1].trim(); // Get sentiment
-        const review = parts[0].trim().slice(0, 20); // Get review trimmed to 20 characters
-
-        // Step 8: Write the transformed data to the output file
-        // Use the specified delimiter for output
-        fs.appendFileSync(outdata, `${sentiment}${delimiter}${review}\n`); // Append each transformed line
-        recordCount++; // Increment the record count
-    }
-
-    // Step 9: Return the total number of records written
-    return recordCount;
+// Check if the input file exists
+function fileExists(filePath) {
+    return fs.existsSync(filePath);
 }
+
+// Clear or create the output file
+function clearOutputFile(filePath) {
+    fs.writeFileSync(filePath, ''); // Create or clear the file
+}
+
 
 // Leave this code here for the automated tests
 module.exports = {
