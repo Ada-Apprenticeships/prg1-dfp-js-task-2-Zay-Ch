@@ -1,30 +1,28 @@
 const fs = require("fs");
 
 function parseFile(indata, outdata, delimiter = ';') {
-    // Step 1: Check if the input file exists
-    if (!fs.existsSync(indata)) {
-        return -1; // Return -1 if the file does not exist
-    }
+    if (!fs.existsSync(indata)) return -1; // Checks if the input file exists then return -1 if the file does not exist
 
-    // Step 2: Clear the output file (create or overwrite)
-    fs.writeFileSync(outdata, ''); // This will create the file if it doesn't exist, or clear it if it does
+    clearOutputFile(outdata); // Clear or create the output file
 
-    // Step 3: Read the input file in UTF-8 encoding
-    const inputContent = fs.readFileSync(indata, 'utf8');
+    const inputContent = fs.readFileSync(indata, 'utf8'); // Read the input file in UTF-8 encoding
+    const lines = inputContent.split('\n'); // Split the input into lines
     
-    // Step 4: Split the input into lines
-    const lines = inputContent.split('\n');
     let recordCount = 0; // Initialize a counter for records written
 
-    // Step 5: Process each line
-    for (let i = 0; i < lines.length; i++) { // Start from 0, will handle header later
-        let line = lines[i];
-        if (line.trim() === "") continue; // Skip empty lines
-
-        // Step 6: Handle header row
-        if (i === 0) {
-            continue; // Ignore the header row
+    // Process each line, starting from the second line to skip the header
+    lines.slice(1).forEach(line => {
+        if (line.trim()) { // Skip empty lines
+            const transformedLine = transformLine(line, delimiter);
+            if (transformedLine) {
+                fs.appendFileSync(outdata, transformLine + '\n'); //Append the transformed line
+                recordCount++; // Increment the record count
+            }
         }
+    });
+
+    return recordCount; // Return the total number of records written
+}
 
         // Step 7: Split the line using the specified delimiter
         const parts = line.split(delimiter);
