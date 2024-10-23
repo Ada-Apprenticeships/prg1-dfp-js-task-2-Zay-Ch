@@ -1,0 +1,49 @@
+1. Why do you put a ! in front of fs.existsSync(indata)?
+The ! operator is a logical NOT operator in JavaScript. It negates the value of the expression that follows it.
+
+fs.existsSync(indata) returns true if the file exists and false if it does not.
+By using !fs.existsSync(indata), we check if the file does not exist. If it doesn't exist, the condition evaluates to true, and we can handle that case (e.g., by returning -1).
+
+
+2. What does writeFileSync do?
+writeFileSync is a method from the fs (file system) module in Node.js that synchronously writes data to a file.
+
+If the file does not exist, it creates a new file.
+If the file already exists, it overwrites the file with the new data provided.
+The syntax is fs.writeFileSync(path, data), where path is the file path and data is the content to write.
+
+
+3. Why do we/should use UTF-8 encoding?
+UTF-8 is a character encoding that can represent every character in the Unicode character set. It is widely used because:
+
+It supports a vast range of characters from different languages.
+It is backward compatible with ASCII, making it a safe choice for text files that may contain standard English characters.
+Specifying UTF-8 encoding when reading or writing files ensures that characters are correctly interpreted and displayed, avoiding issues with character representation.
+
+
+4. Is continue used to skip rows?
+Yes, the continue statement is used in loops to skip the current iteration and move to the next iteration of the loop.
+
+In the context of your code, if a line is empty or if it’s the header row, the continue statement causes the loop to skip any further processing for that particular line and proceed to the next line.
+
+
+5. What is a sentiment?
+In the context of your code, "sentiment" typically refers to the emotional tone or attitude expressed in a piece of text (e.g., a review).
+
+In your code, it is derived from the second part of the split line (e.g., "positive", "negative"). The sentiment is a classification that can be useful for analysis, such as determining the overall positivity or negativity of reviews.
+
+
+
+6. Why is parts[0] used in the line const review = parts[0].trim().slice(0, 20);?
+parts[0] refers to the first part of the split line, which, based on your data format, is expected to contain the review text.
+
+The trim() method removes any leading or trailing whitespace from the review text.
+The slice(0, 20) method is used to limit the review to the first 20 characters, ensuring that the output does not exceed a certain length.
+
+
+
+7. How does the line fs.appendFileSync(outdata, '${sentiment};${review}\n'); work?
+This line is intended to append a new line of text to the output file specified by outdata.
+
+The appendFileSync method adds the specified content to the end of the file without overwriting the existing content.
+The string template syntax ${sentiment};${review}\n is used to format the output line, where sentiment and review are variables containing the respective values. The \n at the end adds a newline character, ensuring that each entry is on a new line in the output file.

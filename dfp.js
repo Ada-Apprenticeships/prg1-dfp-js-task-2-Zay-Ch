@@ -1,4 +1,4 @@
-const fs = require("fs"); // Importing fs to allow us to use it.
+const fs = require("fs");
 
 function parseFile(indata, outdata, delimiter = ';') {
     // Step 1: Check if the input file exists
@@ -34,7 +34,8 @@ function parseFile(indata, outdata, delimiter = ';') {
         const review = parts[0].trim().slice(0, 20); // Get review trimmed to 20 characters
 
         // Step 8: Write the transformed data to the output file
-        fs.appendFileSync(outdata, `${sentiment};${review}\n`); // Append each transformed line
+        // Use the specified delimiter for output
+        fs.appendFileSync(outdata, `${sentiment}${delimiter}${review}\n`); // Append each transformed line
         recordCount++; // Increment the record count
     }
 
