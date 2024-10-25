@@ -5,27 +5,27 @@ function parseFile(indata, outdata, delimiter = ';') {
     if (!fs.existsSync(indata)) {
         return -1;
     }
-
-    fs.writeFileSync(outdata, ''); // This will create the file if it doesn't exist, or clear it if it does
+    // Clear the output file or create it if it doesn't exist
+    fs.writeFileSync(outdata, '');
+    // Read the input file content
     const inputContent = fs.readFileSync(indata, 'utf8');
     const lines = inputContent.split('\n');
-    let recordCount = 0; // recordCount initializes a counter for the records written
-    
-    for (let i = 0; i < lines.length; i++) {
-        let line = lines[i];
-        if (line.trim() === "") continue; // Skip empty lines
-        if (i === 0) continue; // Ignore the header row
-
-        const parts = line.split(delimiter); // Split the line using the specified delimiter
-        if (parts.length < 2) continue; // Ensure there are at least two parts
-
-        const sentiment = parts[1].trim();
-        const review = parts[0].trim().slice(0, 20); // Get review trimmed to 20 characters
-
-        fs.appendFileSync(outdata, `${sentiment}${delimiter}${review}\n`); // Append each transformed line
-        recordCount++; // Increment the record count
+    // Skip the first line (header) and filter out empty lines
+    const records = lines.slice(1) // Skip the header
+                         .filter(line => line.trim() !== "") // Remove empty lines
+                         .map(line => {
+                             const parts = line.split(delimiter);
+                             if (parts.length < 2) return null; // Ensure there are at least two parts
+                             const sentiment = parts[1].trim();
+                             const review = parts[0].trim().slice(0, 20); // Get review trimmed to 20 characters
+                             return `${sentiment}${delimiter}${review}`;
+                         })
+                         .filter(Boolean); // Remove null values
+    // Write all records to the output file in one go
+    if (records.length > 0) {
+        fs.writeFileSync(outdata, records.join('\n') + '\n');
     }
-    return recordCount;
+    return records.length; // Return the number of records written
 }
 
 // Leave this code here for the automated tests
